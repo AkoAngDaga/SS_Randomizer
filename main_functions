@@ -1,0 +1,64 @@
+import random
+
+#asks for names
+def get_names():
+    names = []
+    name = "a"
+
+    #adds names to an array. Must have two or more names
+    while name or len(names) < 2:
+        name = input("Enter a name: ")
+        #msg will only come up if user stops entering names before two names
+        if name:
+            names.append(name)
+        elif len(names) < 2:
+            print ("Please enter two or more names")
+            
+
+    #removes any whitespace before and after names
+    for index, name in enumerate(names):
+        names[index] = name.strip()
+
+    return names
+
+#takes array of names and assigns them to each other in a dictionary
+def assign_names(names):
+    pairs = dict()
+    names_copy = names.copy()
+    name = names_copy[0] #sets the first name to pair
+    first_name = names[0]
+
+    for i in range(0, len(names_copy)):
+        #checks if the array only has one element left
+        if len(names_copy) == 1:
+            pairs[names_copy[0]] = first_name
+            break
+        
+        #pops current name so it can't be picked
+        names_copy.pop(names_copy.index(name))
+        
+        #chooses a random name
+        index = random.randint(0, len(names_copy)-1)
+        
+        #pairs selected name with random name
+        pairs[name] = names_copy[index]
+
+        #changes current name to the random name
+        name = names_copy[index]
+    
+    return pairs    
+    
+
+#puts the names in a readable text
+def format_names(pairs, names):
+    for index in range(0, len(pairs)):
+        name = names[index]
+        dict_pair = pairs[name]
+        print ("\n%s is paired with %s" % (name, dict_pair))
+
+print ("Welcome the the Secret Santa Randomizer")
+names_array = get_names()
+print ("assigning . . .")
+dict_pairs = assign_names(names_array)
+
+format_names(dict_pairs, names_array)
